@@ -45,11 +45,18 @@ app.get("/api/:date?", function (req, res) {
   }
 });
 
-app.get("/api/1451001600000", function (req, res) {
-  res.json({
-    unix: 1451001600000,
-    utc: "Fri, 25 Dec 2015 00:00:00 GMT"
-  });
+app.get("/api/:timestamp", function (req, res) {
+  const timestamp = parseInt(req.params.timestamp);
+
+  if (isNaN(timestamp)) {
+    res.json({ error: "Invalid Timestamp" });
+  } else {
+    const date = new Date(timestamp);
+    res.json({
+      unix: timestamp,
+      utc: date.toUTCString()
+    });
+  }
 });
 
 // Listen on port set in environment variable or default to 3000
